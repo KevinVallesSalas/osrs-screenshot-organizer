@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function FileSystemAccess() {
+function FileSystemAccess({ onFilesFound }) {
   const [imageFiles, setImageFiles] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [progressMessage, setProgressMessage] = useState('');
@@ -9,7 +9,6 @@ function FileSystemAccess() {
   // Recursive function to traverse directories, accepting a progress callback
   const getImageFiles = async (dirHandle) => {
     let files = [];
-    // Update progress with the current directory name
     setProgressMessage(`Scanning folder: ${dirHandle.name}`);
     try {
       for await (const entry of dirHandle.values()) {
@@ -28,7 +27,7 @@ function FileSystemAccess() {
         }
       }
     } catch (error) {
-      console.error(`Error scanning folder ${dirHandle.name}:`, error);
+      console.error(`[getImageFiles] Error scanning folder ${dirHandle.name}:`, error);
       // Propagate error so it can be caught in the outer try/catch
       throw error;
     }
@@ -52,14 +51,18 @@ function FileSystemAccess() {
           setProgressMessage(`Search complete. Found ${files.length} image(s).`);
         }
         setImageFiles(files);
+        if (onFilesFound) {
+          onFilesFound(files);
+        }
       } catch (err) {
-        console.error('Directory selection failed:', err);
+        console.error('[handlePickDirectory] Directory selection failed:', err);
         setErrorMessage('Directory selection failed or was cancelled.');
       } finally {
         setIsSearching(false);
       }
     } else {
       setErrorMessage('File System Access API is not supported in this browser.');
+      console.error('[handlePickDirectory] File System Access API is not supported in this browser.');
     }
   };
 
@@ -68,15 +71,15 @@ function FileSystemAccess() {
       <button onClick={handlePickDirectory} disabled={isSearching}>
         {isSearching ? 'Searching...' : 'Pick Screenshot Folder'}
       </button>
-      
+
       {progressMessage && (
         <p style={{ marginTop: '1rem' }}>{progressMessage}</p>
       )}
-      
+
       {errorMessage && (
         <p style={{ color: 'red' }}>{errorMessage}</p>
       )}
-      
+
       {imageFiles.length > 0 && (
         <div>
           <h3>Found {imageFiles.length} image(s):</h3>

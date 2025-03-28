@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FileSystemAccess from './features/fileSystemAccess/FileSystemAccess';
 import GalleryView from './features/gallery/GalleryView';
+import './App.css'; // Import your global styles
 
 function App() {
   const [imageFiles, setImageFiles] = useState([]);
@@ -11,11 +12,9 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="app-container">
       <h1>OSRS Screenshot Organizer</h1>
-      {/* FileSystemAccess will call handleFilesFound after scanning */}
       <FileSystemAccess onFilesFound={handleFilesFound} />
-      {/* Only render GalleryView if imageFiles is not empty */}
       {imageFiles.length > 0 && <GalleryView imageFiles={imageFiles} />}
     </div>
   );

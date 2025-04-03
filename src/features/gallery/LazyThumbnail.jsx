@@ -1,19 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getCachedThumbnail } from './thumbnailCache';
+import { getCachedThumbnail } from './thumbnailCache'; // Ensure this function returns a valid Blob URL, if available.
 
 function LazyThumbnail({ fileEntry }) {
   const [thumbnailURL, setThumbnailURL] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Capture the current ref value in a variable
+    // Capture the current ref value so it's available in the callback and cleanup.
     const currentRef = containerRef.current;
     const observer = new IntersectionObserver(
       async (entries, observer) => {
         if (entries[0].isIntersecting) {
-          const dataURL = await getCachedThumbnail(fileEntry);
-          setThumbnailURL(dataURL || null);
-          // Unobserve using the captured ref value
+          // Try to get the cached thumbnail.
+          let url = await getCachedThumbnail(fileEntry);
+          // If no cached thumbnail is available or it's not a valid URL,
+          // get the file and create an object URL.
+          if (!url) {
+            try {
+              const file = await fileEntry.getFile();
+              url = URL.createObjectURL(file);
+            } catch (error) {
+              console.error('Error getting file for thumbnail:', error);
+            }
+          }
+          setThumbnailURL(url);
           if (currentRef) {
             observer.unobserve(currentRef);
           }
@@ -27,7 +37,6 @@ function LazyThumbnail({ fileEntry }) {
     }
     
     return () => {
-      // Use the captured ref value in cleanup
       if (currentRef) {
         observer.unobserve(currentRef);
       }
@@ -35,7 +44,10 @@ function LazyThumbnail({ fileEntry }) {
   }, [fileEntry]);
 
   return (
-    <div ref={containerRef} style={{ width: '220px', height: '220px', margin: '0.5rem' }}>
+    <div
+      ref={containerRef}
+      style={{ width: '220px', height: '220px', margin: '0.5rem' }}
+    >
       {thumbnailURL ? (
         <img
           src={thumbnailURL}

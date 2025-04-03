@@ -1,21 +1,26 @@
+// App.jsx
 import React, { useState } from 'react';
 import FileSystemAccess from './features/fileSystemAccess/FileSystemAccess';
 import GalleryView from './features/gallery/GalleryView';
-import './App.css'; // Import your global styles
+import './App.css';
 
 function App() {
-  const [imageFiles, setImageFiles] = useState([]);
+  // State will hold the flattened array of file objects.
+  const [fileArray, setFileArray] = useState(null);
 
-  // Callback to receive image files from FileSystemAccess
-  const handleFilesFound = (files) => {
-    setImageFiles(files);
+  // Callback receives the flattened file array from FileSystemAccess.
+  const handleFilesFound = (fileArrayFromFS) => {
+    console.log('Flattened File Array:', fileArrayFromFS);
+    setFileArray(fileArrayFromFS);
   };
 
   return (
-    <div className="app-container">
-      <h1>OSRS Screenshot Organizer</h1>
-      <FileSystemAccess onFilesFound={handleFilesFound} />
-      {imageFiles.length > 0 && <GalleryView imageFiles={imageFiles} />}
+    <div className="app-wrapper">
+      <header className="app-header">
+        <h1>OSRS Screenshot Organizer</h1>
+        <FileSystemAccess onFilesFound={handleFilesFound} />
+      </header>
+      {fileArray && <GalleryView fileArray={fileArray} />}
     </div>
   );
 }

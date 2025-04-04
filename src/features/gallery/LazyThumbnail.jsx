@@ -1,20 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getCachedThumbnail } from './thumbnailCache'; // Ensure this function returns a valid Blob URL, if available.
+import { getCachedThumbnail } from './thumbnailCache';
 
 function LazyThumbnail({ fileEntry }) {
   const [thumbnailURL, setThumbnailURL] = useState(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Capture the current ref value so it's available in the callback and cleanup.
     const currentRef = containerRef.current;
     const observer = new IntersectionObserver(
       async (entries, observer) => {
         if (entries[0].isIntersecting) {
-          // Try to get the cached thumbnail.
           let url = await getCachedThumbnail(fileEntry);
-          // If no cached thumbnail is available or it's not a valid URL,
-          // get the file and create an object URL.
           if (!url) {
             try {
               const file = await fileEntry.getFile();
@@ -35,7 +31,7 @@ function LazyThumbnail({ fileEntry }) {
     if (currentRef) {
       observer.observe(currentRef);
     }
-    
+
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);
@@ -51,7 +47,7 @@ function LazyThumbnail({ fileEntry }) {
       {thumbnailURL ? (
         <img
           src={thumbnailURL}
-          alt={fileEntry.name}
+          alt="thumbnail"
           style={{ maxWidth: '200px', maxHeight: '200px' }}
         />
       ) : (
@@ -68,7 +64,6 @@ function LazyThumbnail({ fileEntry }) {
           Loading...
         </div>
       )}
-      <p>{fileEntry.name}</p>
     </div>
   );
 }

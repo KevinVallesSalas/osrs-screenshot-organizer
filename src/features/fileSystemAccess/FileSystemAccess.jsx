@@ -77,7 +77,6 @@ function FileSystemAccess({ onFilesFound }) {
 
         // Flatten the folder tree into an array of file objects.
         const fileArray = flattenFileArray(fileTree);
-        console.log('Flattened File Array:', fileArray);
 
         if (onFilesFound) {
           onFilesFound(fileArray);

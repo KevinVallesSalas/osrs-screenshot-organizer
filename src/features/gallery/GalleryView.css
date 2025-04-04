@@ -1,17 +1,19 @@
+/* GalleryView.css */
+
 /* Main container: sidebar + gallery */
 .gallery-view {
   display: flex;
-  height: 100%;
+  height: 100vh;
   width: 100%;
-  background-color: #2f2f2f; /* Dark gray background */
-  color: #EEE5E9; /* Light text for contrast */
+  background-color: #2d2d2d; /* Dark gray background */
 }
 
 /* Sidebar styles */
 .gallery-sidebar {
-  width: 25%;            /* Sidebar takes up 25% of the width */
+  width: 20%;
   min-width: 220px;
   background-color: #08415C; /* Indigo Dye */
+  color: #FFFFFF;
   padding: 1rem;
   box-sizing: border-box;
   overflow-y: auto;
@@ -23,63 +25,54 @@
   font-size: 1.4rem;
   border-bottom: 2px solid #F1BF98; /* Peach */
   padding-bottom: 0.25rem;
-  color: #FFFFFF;
 }
 
-.gallery-sidebar ul {
+.sidebar-categories {
   list-style: none;
   padding-left: 0;
   margin: 0;
 }
 
-/* Category item */
-.category-item {
+.sidebar-categories li {
   cursor: pointer;
   padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  font-weight: normal;
-  color: #FFFFFF;
-}
-
-.category-item:hover {
-  background-color: #F1BF98; /* Peach */
-  color: #08415C; /* Indigo Dye */
-}
-
-.category-item.selected {
-  background-color: #F1BF98; /* Peach */
-  color: #08415C; /* Indigo Dye */
-  font-weight: bold;
-}
-
-/* Subcategory list nesting */
-.subcat-list {
-  margin-top: 0.5rem;
-  margin-left: 0.75rem;
-  padding-left: 0.75rem;
-  border-left: 2px solid #F1BF98; /* Optional vertical line for clarity */
-}
-
-.subcategory-item {
-  cursor: pointer;
-  padding: 0.3rem 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  font-weight: normal;
-  color: #FFFFFF;
   margin-bottom: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
-.subcategory-item:hover {
-  background-color: #F1BF98; /* Peach */
-  color: #08415C; /* Indigo Dye */
+.sidebar-categories li.selected {
+  background-color: #F1BF98;
+  color: #08415C;
 }
 
-.subcategory-item.selected {
-  background-color: #F1BF98; /* Peach */
-  color: #08415C; /* Indigo Dye */
-  font-weight: bold;
+.sidebar-categories li:hover {
+  background-color: #F1BF98;
+  color: #08415C;
+}
+
+/* Subcategory styling: indented */
+.sidebar-subcategories {
+  list-style: none;
+  padding-left: 1rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.sidebar-subcategories li {
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-subcategories li.selected {
+  background-color: #E6A57E; /* A slightly different peach shade */
+  color: #08415C;
+}
+
+.sidebar-subcategories li:hover {
+  background-color: #E6A57E;
+  color: #08415C;
 }
 
 /* Main gallery area */
@@ -99,10 +92,15 @@
   color: #F1BF98; /* Peach */
 }
 
+.sort-controls {
+  margin-top: 0.5rem;
+  color: #F1BF98;
+}
+
 /* Grid of images */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 }
 
